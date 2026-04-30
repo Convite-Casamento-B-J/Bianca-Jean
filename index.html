@@ -105,6 +105,11 @@
   .gcard-desc{font-family:'DM Sans',sans-serif;font-weight:300;font-size:10px;color:#A9A9A9!important}
   .pix-view{display:none;flex-direction:column;align-items:center;gap:12px}
   .pix-view.active{display:flex}
+  .pix-key{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 20px;border:1px solid #8fa9d8;border-radius:10px;background:#fff!important;cursor:pointer;transition:all .3s;margin-bottom:4px;margin-top:-6px}
+  .pix-key:hover{background:#f0f4fa!important;box-shadow:0 2px 12px rgba(143,169,216,.2)}
+  .pix-key-label{font-family:'DM Sans',sans-serif;font-weight:300;font-size:9px;color:#A9A9A9!important;letter-spacing:1px}
+  .pix-key-value{font-family:'DM Sans',sans-serif;font-weight:400;font-size:16px;color:#8fa9d8!important;letter-spacing:2px}
+  .pix-key-copy{font-family:'DM Sans',sans-serif;font-weight:300;font-size:8px;color:#A9A9A9!important;letter-spacing:1px;text-transform:uppercase;transition:color .3s}
   .pix-qr{padding:12px;margin-top:-10px;border:1.5px solid #8fa9d8;border-radius:14px;background:#fff!important;box-shadow:0 4px 20px rgba(143,169,216,.15)}
   .pix-qr img{display:block;width:150px;height:150px}
   .pix-back{margin-top:6px;font-family:'DM Sans',sans-serif;font-weight:300;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#8fa9d8!important;background:none;border:none;cursor:pointer;padding:6px 12px;transition:opacity .3s}
@@ -161,7 +166,12 @@
       </div>
       <div id="pixView" class="pix-view">
         <p class="gift-heading">Pix</p>
-        <p class="gift-sub">Escaneie o QR Code abaixo</p>
+        <p class="gift-sub">Copie a chave ou escaneie o QR Code abaixo</p>
+        <div class="pix-key" onclick="copyPix()">
+          <span class="pix-key-label">Chave Pix (telefone):</span>
+          <span class="pix-key-value" id="pixKey">31993939445</span>
+          <span class="pix-key-copy" id="pixCopyMsg">toque para copiar</span>
+        </div>
         <div class="pix-qr"><img src="data:image/png;base64,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" alt="QR Code Pix"></div>
         <button class="pix-back" onclick="backToOptions()">&#8592; voltar</button>
       </div>
@@ -224,6 +234,22 @@
   function closeGift(){document.getElementById('giftOverlay').classList.add('hidden')}
   function showPix(){document.getElementById('giftOptions').classList.add('hide');document.getElementById('pixView').classList.add('active')}
   function backToOptions(){document.getElementById('giftOptions').classList.remove('hide');document.getElementById('pixView').classList.remove('active')}
+  function copyPix(){
+    var key=document.getElementById('pixKey').textContent;
+    navigator.clipboard.writeText(key).then(function(){
+      document.getElementById('pixCopyMsg').textContent='copiado!';
+      document.getElementById('pixCopyMsg').style.color='#8fa9d8';
+      setTimeout(function(){
+        document.getElementById('pixCopyMsg').textContent='toque para copiar';
+        document.getElementById('pixCopyMsg').style.color='';
+      },2000);
+    }).catch(function(){
+      var t=document.createElement('textarea');t.value=key;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
+      document.getElementById('pixCopyMsg').textContent='copiado!';
+      document.getElementById('pixCopyMsg').style.color='#8fa9d8';
+      setTimeout(function(){document.getElementById('pixCopyMsg').textContent='toque para copiar';document.getElementById('pixCopyMsg').style.color='';},2000);
+    });
+  }
 </script>
 </body>
 </html>
